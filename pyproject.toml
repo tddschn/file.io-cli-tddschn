@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "file.io-cli-tddschn"
-version = "1.0.5"
+version = "1.0.6"
 description = "Command-line tool to upload files to https://file.io"
 authors = ["Teddy Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
 license = "MIT"
