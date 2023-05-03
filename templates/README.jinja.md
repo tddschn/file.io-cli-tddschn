@@ -26,34 +26,7 @@ Command-line tool to upload files to https://file.io
 
 ### Synopsis
 
-
-
-```
-$ file.io-cli --help
-
-usage: file.io-cli [-h] [--version] [-e E] [-n NAME] [-q] [-c] [-t PATH] [-z]
-                   [-v]
-                   [file]
-
-Upload a file to file.io and print the download link. Supports stdin.
-
-positional arguments:
-  file                  the file to upload
-
-options:
-  -h, --help            show this help message and exit
-  --version             show program's version number and exit
-  -e E, --expires E     set the expiration time for the uploaded file
-  -n NAME, --name NAME  specify or override the filename
-  -q, --quiet           hide the progress bar
-  -c, --clip            copy the URL to your clipboard
-  -t PATH, --tar PATH   create a TAR archive from the specified file or
-                        directory
-  -z, --gzip            filter the TAR archive through gzip (only with -t,
-                        --tar)
-  -v, --verbose         print the server response
-
-```
+{{ prompt_commands_and_usages }}
 
 ### Examples
 

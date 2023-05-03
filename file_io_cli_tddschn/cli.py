@@ -30,8 +30,7 @@ import threading
 import time
 import uuid
 
-__author__ = 'Niklas Rosenstein <rosensteinniklas@gmail.com> Teddy Xinyuan Chen <45612704+tddschn@users.noreply.github.com>'
-__version__ = '1.0.5'
+from file_io_cli_tddschn import __version__, __author__
 
 
 class MultipartFileEncoder(object):

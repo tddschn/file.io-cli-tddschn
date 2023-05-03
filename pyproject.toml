@@ -5,7 +5,8 @@ description = "Command-line tool to upload files to https://file.io"
 authors = ["Teddy Xinyuan Chen <45612704+tddschn@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "file_io_cli.py" }]
+# packages = [{ include = "file_io_cli.py" }]
+packages = [{ include = "file_io_cli_tddschn" }]
 homepage = "https://github.com/tddschn/file.io-cli-tddschn"
 repository = "https://github.com/tddschn/file.io-cli-tddschn"
 classifiers = ["Topic :: Utilities"]
@@ -15,7 +16,8 @@ keywords = ["file.io", "utility", "uploader", "CLI"]
 "Bug Tracker" = "https://github.com/tddschn/file.io-cli-tddschn/issues"
 
 [tool.poetry.scripts]
-"file.io-cli" = "file_io_cli:_entry_point"
+"file.io-cli" = "file_io_cli_tddschn.cli:_entry_point"
+"file.io" = "file_io_cli_tddschn.cli:_entry_point"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -26,6 +28,7 @@ requests = ">=2.25.1,<3.0.0"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 better-exceptions = "^0.3.3"
+jinja2 = "^3.1.2"
 
 [build-system]
 requires = ["poetry-core"]
