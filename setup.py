@@ -9,42 +9,42 @@ import sys
 
 readme_file = 'README.md'
 if os.path.isfile(readme_file):
-  with io.open(readme_file, encoding='utf8') as fp:
-    long_description = fp.read()
+    with io.open(readme_file, encoding='utf8') as fp:
+        long_description = fp.read()
 else:
-  print("warning: file \"{}\" does not exist.".format(readme_file), file=sys.stderr)
-  long_description = None
+    print("warning: file \"{}\" does not exist.".format(readme_file), file=sys.stderr)
+    long_description = None
 
 requirements = [
-  'clipboard >=0.0.4,<1.0.0',
-  'requests >=2.25.1,<3.0.0',
+    'clipboard >=0.0.4,<1.0.0',
+    'requests >=2.25.1,<3.0.0',
 ]
 
 setuptools.setup(
-  name = 'file.io-cli',
-  version = '1.0.4',
-  author = 'Niklas Rosenstein',
-  author_email = 'rosensteinniklas@gmail.com',
-  description = 'Command-line tool to upload files to https://file.io',
-  long_description = long_description,
-  long_description_content_type = 'text/markdown',
-  url = 'https://github.com/NiklasRosenstein/file.io-cli',
-  license = None,
-  py_modules = ['file_io_cli'],
-  package_dir = {'': '.'},
-  include_package_data = True,
-  install_requires = requirements,
-  extras_require = {},
-  tests_require = [],
-  python_requires = '>=3.3.0,<4.0.0',
-  data_files = [],
-  entry_points = {
-    'console_scripts': [
-      'file.io-cli = file_io_cli:_entry_point',
-    ]
-  },
-  cmdclass = {},
-  keywords = [],
-  classifiers = [],
-  zip_safe = True,
+    name='file.io-cli',
+    version='1.0.4',
+    author='Niklas Rosenstein',
+    author_email='rosensteinniklas@gmail.com',
+    description='Command-line tool to upload files to https://file.io',
+    long_description=long_description,  # type: ignore
+    long_description_content_type='text/markdown',
+    url='https://github.com/NiklasRosenstein/file.io-cli',
+    license=None,  # type: ignore
+    py_modules=['file_io_cli'],
+    package_dir={'': '.'},
+    include_package_data=True,
+    install_requires=requirements,
+    extras_require={},
+    tests_require=[],
+    python_requires='>=3.3.0,<4.0.0',
+    data_files=[],
+    entry_points={
+        'console_scripts': [
+            'file.io-cli = file_io_cli:_entry_point',
+        ]
+    },
+    cmdclass={},
+    keywords=[],
+    classifiers=[],
+    zip_safe=True,
 )
