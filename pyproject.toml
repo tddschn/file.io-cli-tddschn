@@ -16,8 +16,10 @@ keywords = ["file.io", "utility", "uploader", "CLI"]
 "Bug Tracker" = "https://github.com/tddschn/file.io-cli-tddschn/issues"
 
 [tool.poetry.scripts]
-"file.io-cli" = "file_io_cli_tddschn.cli:_entry_point"
-"file.io" = "file_io_cli_tddschn.cli:_entry_point"
+# "file.io-cli" = "file_io_cli_tddschn.cli:_entry_point"
+# "file.io" = "file_io_cli_tddschn.cli:_entry_point"
+"file.io-cli" = "file_io_cli_tddschn.cli:main_sync"
+"file.io" = "file_io_cli_tddschn.cli:main_sync"
 
 [tool.poetry.dependencies]
 python = "^3.11"

@@ -20,6 +20,7 @@
 
 from __future__ import division, print_function
 
+import asyncio
 import argparse
 from typing import Literal
 import json
@@ -252,6 +253,9 @@ def get_args(prog=None) -> argparse.Namespace | Literal[0]:
     parser.add_argument(
         '-v', '--verbose', action='store_true', help='print the server response'
     )
+    parser.add_argument(
+        '-N', '--upload-times', type=int, help='upload the file N times', default=1
+    )
     parser.add_argument('file', nargs='?', help='the file to upload')
     args = parser.parse_args()
 
@@ -263,7 +267,7 @@ def get_args(prog=None) -> argparse.Namespace | Literal[0]:
     return args
 
 
-def main(prog=None, argv=None):
+async def main(prog=None, argv=None):
     args = get_args(prog=prog)
     import clipboard
     import requests
@@ -288,14 +292,10 @@ def main(prog=None, argv=None):
         file_size = None
         fp = sys.stdin if sys.version_info[0] == 2 else sys.stdin.buffer
 
-    if not args.quiet:
+    if not args.quiet and args.upload_times == 1:
         progress = ProgressDisplay(file_size)
         fp = FileMonitor(fp, lambda f: progress.update(f.bytes_read))
 
-    encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
-    stream = GeneratorFileReader(encoder.iter_encode())
-
-    headers = {'Content-Type': encoder.content_type}
     params = {}
     if args.expires:
         params['expires'] = args.expiry
@@ -306,7 +306,30 @@ def main(prog=None, argv=None):
 
         url += '?' + urlencode(params)
 
+    if args.upload_times > 1:
+        # use asyncio.to_thread
+
+        def upload_file() -> dict[str, str]:
+            assert not isinstance(args, int)
+            encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
+            stream = GeneratorFileReader(encoder.iter_encode())
+            headers = {'Content-Type': encoder.content_type}
+            response = requests.post(
+                url, params=params, data=stream_file(stream), headers=headers
+            )
+            response.raise_for_status()
+            return response.json()
+
+        tasks = [asyncio.to_thread(upload_file) for _ in range(args.upload_times)]
+        responses = await asyncio.gather(*tasks)
+        links = [r['link'] for r in responses]
+        print('\n'.join(links))
+        return
+
     try:
+        encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
+        stream = GeneratorFileReader(encoder.iter_encode())
+        headers = {'Content-Type': encoder.content_type}
         response = requests.post(
             url, params=params, data=stream_file(stream), headers=headers
         )
@@ -334,7 +357,12 @@ def main(prog=None, argv=None):
         print(link)
 
 
-_entry_point = lambda: sys.exit(main())
+# _entry_point = lambda: sys.exit(main())
+def main_sync():
+    asyncio.run(main())
+
 
 if __name__ == '__main__':
-    _entry_point()
+    # _entry_point()
+
+    main_sync()
