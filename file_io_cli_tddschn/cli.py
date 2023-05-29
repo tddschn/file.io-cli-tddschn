@@ -1,4 +1,5 @@
 # Copyright (c) 2018 Niklas Rosenstein
+# Copyright (c) 2023 Teddy Xinyuan Chen
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
