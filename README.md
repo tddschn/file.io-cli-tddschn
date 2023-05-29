@@ -121,6 +121,11 @@ $ poetry install
 
 ### Changelog
 
+#### 1.1.2
+
+* Add -N, --num-threads option to upload files multiple times concurrently
+* Fix the uploaded file name when using relative path like `.`
+
 #### 1.0.5
 
 * Add -v, --verbose option to print server response in JSON
