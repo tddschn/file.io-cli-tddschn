@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: file.io -N 3 relative path",
+            "type": "python",
+            "request": "launch",
+            "program": "/Users/tscp/Library/Caches/pypoetry/virtualenvs/file-io-cli-tddschn-cNC8jHOM-py3.11/bin/file.io",
+            "args": [
+                "-N",
+                "3",
+                "/Users/tscp/testdir/file.io-cli-tddschn/LICENSE"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

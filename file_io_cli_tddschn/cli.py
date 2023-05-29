@@ -22,7 +22,8 @@ from __future__ import division, print_function
 
 import asyncio
 import argparse
-from typing import Literal
+from io import BufferedReader
+from typing import BinaryIO, Literal
 import json
 import os
 import subprocess
@@ -279,23 +280,6 @@ async def main(prog=None, argv=None):
     elif not args.name and args.tar:
         args.name = os.path.basename(args.tar) + ('.tgz' if args.gzip else '.tar')
 
-    if args.tar:
-        r, w = os.pipe()
-        flags = '-czf-' if args.gzip else '-cf-'
-        spawn_process(['tar', flags, args.tar], stdout=w, on_exit=lambda: os.close(w))
-        file_size = None
-        fp = os.fdopen(r, 'rb')
-    elif args.file:
-        file_size = os.stat(args.file).st_size
-        fp = open(args.file, 'rb')
-    else:
-        file_size = None
-        fp = sys.stdin if sys.version_info[0] == 2 else sys.stdin.buffer
-
-    if not args.quiet and args.upload_times == 1:
-        progress = ProgressDisplay(file_size)
-        fp = FileMonitor(fp, lambda f: progress.update(f.bytes_read))
-
     params = {}
     if args.expires:
         params['expires'] = args.expiry
@@ -306,11 +290,30 @@ async def main(prog=None, argv=None):
 
         url += '?' + urlencode(params)
 
+    def get_fp_and_file_size() -> tuple[BufferedReader | BinaryIO, int | None]:
+        assert not isinstance(args, int)
+        if args.tar:
+            r, w = os.pipe()
+            flags = '-czf-' if args.gzip else '-cf-'
+            spawn_process(
+                ['tar', flags, args.tar], stdout=w, on_exit=lambda: os.close(w)
+            )
+            file_size = None
+            fp = os.fdopen(r, 'rb')
+        elif args.file:
+            file_size = os.stat(args.file).st_size
+            fp = open(args.file, 'rb')
+        else:
+            file_size = None
+            fp = sys.stdin if sys.version_info[0] == 2 else sys.stdin.buffer
+        return fp, file_size
+
     if args.upload_times > 1:
         # use asyncio.to_thread
 
         def upload_file() -> dict[str, str]:
             assert not isinstance(args, int)
+            fp, _ = get_fp_and_file_size()
             encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
             stream = GeneratorFileReader(encoder.iter_encode())
             headers = {'Content-Type': encoder.content_type}
@@ -326,6 +329,10 @@ async def main(prog=None, argv=None):
         print('\n'.join(links))
         return
 
+    fp, file_size = get_fp_and_file_size()
+    if not args.quiet and args.upload_times == 1:
+        progress = ProgressDisplay(file_size)
+        fp = FileMonitor(fp, lambda f: progress.update(f.bytes_read))
     try:
         encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
         stream = GeneratorFileReader(encoder.iter_encode())

@@ -32,7 +32,7 @@ Command-line tool to upload files to https://file.io
 $ file.io-cli --help
 
 usage: file.io-cli [-h] [--version] [-e E] [-n NAME] [-q] [-c] [-t PATH] [-z]
-                   [-v]
+                   [-v] [-N UPLOAD_TIMES]
                    [file]
 
 Upload a file to file.io and print the download link. Supports stdin.
@@ -52,6 +52,8 @@ options:
   -z, --gzip            filter the TAR archive through gzip (only with -t,
                         --tar)
   -v, --verbose         print the server response
+  -N UPLOAD_TIMES, --upload-times UPLOAD_TIMES
+                        upload the file N times
 
 ```
 
@@ -81,6 +83,16 @@ Upload from stdin:
 $ find .. -iname \*.py | file.io -n file-list.txt
 / (312KB)
 https://file.io/uRglUT
+```
+
+Upload a file 3 times concurrently:
+
+```
+$ file.io -N 3 file_io_cli_tddschn/cli.py
+
+https://file.io/Vv7QtVfMVBr2
+https://file.io/10Y2DgoXDJwQ
+https://file.io/rCoWI2PN58cg
 ```
 
 ## Installation

@@ -56,6 +56,16 @@ $ find .. -iname \*.py | file.io -n file-list.txt
 https://file.io/uRglUT
 ```
 
+Upload a file 3 times concurrently:
+
+```
+$ file.io -N 3 file_io_cli_tddschn/cli.py
+
+https://file.io/Vv7QtVfMVBr2
+https://file.io/10Y2DgoXDJwQ
+https://file.io/rCoWI2PN58cg
+```
+
 ## Installation
 
 ### pipx
