@@ -22,6 +22,7 @@ from __future__ import division, print_function
 
 import asyncio
 import argparse
+from functools import cache
 from io import BufferedReader
 from typing import BinaryIO, Literal
 import json
@@ -33,6 +34,7 @@ import time
 import uuid
 
 from file_io_cli_tddschn import __version__, __author__
+from file_io_cli_tddschn.utils import get_abs_path
 
 
 class MultipartFileEncoder(object):
@@ -243,6 +245,7 @@ def get_args(prog=None) -> argparse.Namespace | Literal[0]:
         '-t',
         '--tar',
         metavar='PATH',
+        type=get_abs_path,
         help='create a TAR archive from the specified file or directory',
     )
     parser.add_argument(
@@ -257,7 +260,7 @@ def get_args(prog=None) -> argparse.Namespace | Literal[0]:
     parser.add_argument(
         '-N', '--upload-times', type=int, help='upload the file N times', default=1
     )
-    parser.add_argument('file', nargs='?', help='the file to upload')
+    parser.add_argument('file', nargs='?', type=get_abs_path, help='the file to upload')
     args = parser.parse_args()
 
     if not args.file and not args.tar and sys.stdin.isatty():
@@ -290,6 +293,7 @@ async def main(prog=None, argv=None):
 
         url += '?' + urlencode(params)
 
+    @cache
     def get_fp_and_file_size() -> tuple[BufferedReader | BinaryIO, int | None]:
         assert not isinstance(args, int)
         if args.tar:
