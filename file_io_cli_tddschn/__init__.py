@@ -1,3 +1,3 @@
 
 __author__ = 'Niklas Rosenstein <rosensteinniklas@gmail.com> Teddy Xinyuan Chen <45612704+tddschn@users.noreply.github.com>'
-__version__ = '1.1.0'
+__version__ = '1.1.1'
