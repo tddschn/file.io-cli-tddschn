@@ -288,7 +288,7 @@ async def main(prog=None, argv=None):
     if args.expires:
         params['expires'] = args.expiry
 
-    url = 'http://file.io'
+    url = 'https://file.io'
     if params:
         from urllib.parse import urlencode
 
@@ -331,7 +331,13 @@ async def main(prog=None, argv=None):
         tasks = [asyncio.to_thread(upload_file) for _ in range(args.upload_times)]
         responses = await asyncio.gather(*tasks)
         links = [r['link'] for r in responses]
-        print('\n'.join(links))
+        links_s = '\n'.join(links)
+        if args.verbose:
+            print(json.dumps(responses, indent=2, ensure_ascii=False))
+        else:
+            print(links_s)
+        if args.clip:
+            clipboard.copy(links_s)
         return
 
     fp, file_size = get_fp_and_file_size()
@@ -360,7 +366,7 @@ async def main(prog=None, argv=None):
 
     link = (res_d := response.json())['link']
     if args.verbose:
-        print(json.dumps(res_d, indent=2), file=sys.stderr)
+        print(json.dumps(res_d, indent=2, ensure_ascii=False), file=sys.stderr)
 
     if args.clip:
         print(link, '(copied to clipboard)')
