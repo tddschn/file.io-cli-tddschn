@@ -58,7 +58,7 @@ class MultipartFileEncoder(object):
             headers['Content-Type'] = 'application/octet-stream'
 
         self.headers = b'\r\n'.join(
-            '{}: {}'.format(k, v).encode('ascii') for k, v in headers.items()
+            '{}: {}'.format(k, v).encode() for k, v in headers.items()
         )
 
     def compute_size(self, include_final_boundary=True):
